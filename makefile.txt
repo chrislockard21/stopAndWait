@@ -1,0 +1,39 @@
+The timeout period is set at 0.05. The average RTT was calculated for a
+total of 5 runs with the successful packets without timeout. This value
+was found to be 0.02114098672045777 and from there the timeout interval
+was set to two times the average at 0.04228197344091554. For simplicity,
+This number was set to 0.05.
+
+To build the stack with 3 receivers and one client, simply run
+runContainers.sh from the command line. Doing so will drop you into
+the bash shell for the client. From there you can enter a command as
+specified in the project instructions to send MSSs to the listening servers.
+Below is an example command, and is the command that should be entered in
+the case of the standard 3 receivers.
+
+EX:
+
+python3 p2mpclient.py 172.17.0.3 172.17.0.4 172.17.0.5 7735 testDoc.txt 500
+
+Please note that the IPs for the receivers in this stack will always start
+with 172.17.0.3. Additional receivers can be added in the runContainers.sh
+file; just be sure to also add their name to the stopContainers.sh file so
+they can be removed at the end of testing, and add their IP to the example
+command above.
+
+You can enter one of the receivers to ensure that the file was transferred by
+executing the following command in a terminal window:
+
+docker exec -it container_name bash
+
+If you would like to see the packet loss messages, you will need to start
+another receiver container and bring forward its server process. You can
+do so with the below command after running runContainers.sh:
+
+docker run -it --name receiver4 server python3 p2mpserver.py 7735 newFile.txt 0.05
+
+Just be sure to again include it in the stopContainers.sh file.
+
+The file being transferred is testDoc.txt which is just a copied and pasted RFC
+document. It registers on my machine as 10 MB but for whatever reason only
+measures 9.6 MB in the docker containers.
