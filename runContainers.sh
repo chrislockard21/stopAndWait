@@ -1,3 +1,5 @@
+#!zsh
+
 # Builds the server image
 docker build -t server .
 
